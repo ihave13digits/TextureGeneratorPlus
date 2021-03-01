@@ -21,18 +21,17 @@ public:
     int TICK = 0;
     int SPEED = 5;
     int ALPHA = 200;
-    int WV = 0;
-    int HV = 0;
-    int WT = 8;
-    int HT = 8;
-    int BV = 8;
+    int AX = 0;
+    int AY = 0;
+    int SX = 2;
+    int SY = 2;
     int BX = 2;
     int BY = 2;
     int X = 0;
     int Y = 0;
-    short int shade[3] = {25, 25, 25};
-    short int rando[3] = {30, 30, 30};
-    short int color[3] = {200, 200, 200};
+    short int shade[3] = {1, 1, 1};
+    short int rando[3] = {1, 1, 1};
+    short int color[3] = {254, 254, 254};
     short int c_index = 0;
     int image[4*4][32*32][3];
     int i_index = 0;
@@ -88,8 +87,8 @@ public:
         DrawStringDecal({128,0}, "Image: " + std::to_string(i_index), tc, { 0.5f, 0.5f });
         DrawStringDecal({128,5}, "Color: " + std::to_string(c_index), tc, { 0.5f, 0.5f });
         
-        DrawStringDecal({128,15}, "Align: (" + std::to_string(WV) + ", " + std::to_string(HV) + ")", tc, { 0.5f, 0.5f });
-        DrawStringDecal({128,20}, "Spacing: (" + std::to_string(WT) + ", " + std::to_string(HT) + ")", tc, { 0.5f, 0.5f });
+        DrawStringDecal({128,15}, "Align: (" + std::to_string(AX) + ", " + std::to_string(AY) + ")", tc, { 0.5f, 0.5f });
+        DrawStringDecal({128,20}, "Spacing: (" + std::to_string(SX) + ", " + std::to_string(SY) + ")", tc, { 0.5f, 0.5f });
 
         DrawStringDecal({128,30}, "Blur: (" + std::to_string(BX) + ", " + std::to_string(BY) + ")", tc, { 0.5f, 0.5f});
         DrawStringDecal({128,35}, "Shading Value: ("+std::to_string(shade[0])+", "+std::to_string(shade[1])+", "+std::to_string(shade[2])+")", tc, { 0.5f, 0.5f });
@@ -110,7 +109,7 @@ public:
                 image[i_index][i][2] = (rand()%rando[2])+color[2];
                 if (LINE_H)
                 {
-                    if (x % WT == WV)
+                    if (x % SX == AX)
                     {
                         image[i_index][i][0] = (rand()%shade[0])+color[0];
                         image[i_index][i][1] = (rand()%shade[1])+color[1];
@@ -119,7 +118,7 @@ public:
                 }
                 if (LINE_V)
                 {
-                    if (y % HT == HV)
+                    if (y % SY == AY)
                     {
                         image[i_index][i][0] = (rand()%shade[0])+color[0];
                         image[i_index][i][1] = (rand()%shade[1])+color[1];
@@ -188,16 +187,22 @@ public:
         if (GetKey(olc::Key::CTRL).bHeld) SPEED = 10;
         if (GetKey(olc::Key::CTRL).bReleased) SPEED = 5;
         
-        // Change Modulus Values
-        if (GetKey(olc::Key::I).bPressed) if (HV < HT-1) HV += 1;
-        if (GetKey(olc::Key::K).bPressed) if (HV > 0) HV -= 1;
-        if (GetKey(olc::Key::L).bPressed) if (WV < WT-1) WV += 1;
-        if (GetKey(olc::Key::J).bPressed) if (WV > 0) WV -= 1;
+        // Change Blur Values
+        if (GetKey(olc::Key::NP6).bPressed) if (BX < SIZE-1) BX += 1;
+        if (GetKey(olc::Key::NP4).bPressed) if (BX > 2) BX -= 1;
+        if (GetKey(olc::Key::NP8).bPressed) if (BY < SIZE-1) BY += 1;
+        if (GetKey(olc::Key::NP2).bPressed) if (BY > 2) BY -= 1;
 
-        if (GetKey(olc::Key::T).bPressed) if (HT < SIZE) HT += 1;
-        if (GetKey(olc::Key::G).bPressed) if (HT > 1) HT -= 1;
-        if (GetKey(olc::Key::H).bPressed) if (WT < SIZE) WT += 1;
-        if (GetKey(olc::Key::F).bPressed) if (WT > 1) WT -= 1;
+        // Change Modulus Values
+        if (GetKey(olc::Key::L).bPressed) if (AX < SX-1) AX += 1;
+        if (GetKey(olc::Key::J).bPressed) if (AX > 0) AX -= 1;
+        if (GetKey(olc::Key::K).bPressed) if (AY < SY-1) AY += 1;
+        if (GetKey(olc::Key::I).bPressed) if (AY > 0) AY -= 1;
+
+        if (GetKey(olc::Key::G).bPressed) if (SY < SIZE) SY += 1;
+        if (GetKey(olc::Key::T).bPressed) if (SY > 2) SY -= 1;
+        if (GetKey(olc::Key::H).bPressed) if (SX < SIZE) SX += 1;
+        if (GetKey(olc::Key::F).bPressed) if (SX > 2) SX -= 1;
 
         // Change Selected Color
         if (GetKey(olc::Key::S).bPressed) if (c_index > 0) c_index -= 1;
